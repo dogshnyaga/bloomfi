@@ -1,19 +1,12 @@
-/* --- 0. Variables and Reset --- */
+
 :root {
-  /* Colors */
   --color-white: #ffffff;
   --color-light-gray: #f8f8fa;
-  /* Main background */
   --color-dark-text: #1a1a1a;
   --color-gray-text: #666e7c;
   --color-accent-purple: #8a2be2;
-  /* Used for visual elements */
   --color-dark-bg: #282c34;
-  /* Used for dark buttons and hero text */
   --color-hero-bg: #e6e6fa;
-  /* Very light lilac for contrast */
-
-  /* Typography */
   --font-family: 'Inter', sans-serif;
   --font-weight-regular: 400;
   --font-weight-medium: 500;
@@ -165,7 +158,6 @@ body {
   border-radius: 20px;
   margin: 20px auto;
   width: 1200px;
-  /* Rounded bottom corners like in the design */
 }
 
 .hero-content {
@@ -173,8 +165,6 @@ body {
   max-width: 800px;
   margin: 0 auto;
   padding-bottom: 330px;
-
-  /* Space for the visual below the text */
 }
 
 .hero-icon {
@@ -201,7 +191,6 @@ body {
   line-height: 1.4;
 }
 
-/* Placeholder for the large 3D visual */
 .hero-visual {
   position: absolute;
   bottom: 0;
@@ -214,14 +203,12 @@ body {
   pointer-events: none;
 }
 
-/* Adjust content above the visual */
 .hero .container {
   position: relative;
   z-index: 2;
 }
 
 
-/* --- 3. What is USD Bloom? Section --- */
 .what-is-bloom {
   padding: 100px 0;
 }
@@ -246,7 +233,7 @@ body {
 .right-content {
   max-width: 38%;
   padding-top: 10px;
-  /* Align text vertically */
+
 }
 
 .right-content p {
@@ -256,7 +243,6 @@ body {
   font-weight: var(--font-weight-medium);
 }
 
-/* Feature Cards - Horizontal Scrolling Version */
 .feature-cards {
   display: flex;
   gap: 30px;
@@ -271,7 +257,6 @@ body {
   scroll-snap-type: x mandatory;
 }
 
-/* Individual cards */
 .feature-cards .card {
   background-color: #2b2742;
   padding: 25px;
@@ -300,7 +285,6 @@ body {
   margin-top: auto;
 }
 
-/* Special visual card - first card (double width) */
 .feature-cards .card-visual {
   background: radial-gradient(circle at 90% 50%,
       #dde0f3 30%,
@@ -314,7 +298,6 @@ body {
   width: 50%;
 }
 
-/* Custom scrollbar for feature cards */
 .feature-cards::-webkit-scrollbar {
   height: 8px;
 }
@@ -333,7 +316,6 @@ body {
   background: #6b21a8;
 }
 
-/* Horizontal scroll mode indicators */
 .feature-cards.horizontal-scroll-mode {
   border: 2px solid var(--color-accent-purple);
   border-radius: 20px;
@@ -356,7 +338,6 @@ body {
   animation: pulse 2s infinite;
 }
 
-/* Scroll hint overlay */
 #scroll-hint {
   position: fixed;
   top: 20px;
@@ -385,7 +366,6 @@ body {
   opacity: 0.9;
 }
 
-/* Body scroll lock indicator */
 body.horizontal-scroll-active {
   cursor: grab;
 }
@@ -394,14 +374,12 @@ body.horizontal-scroll-active:active {
   cursor: grabbing;
 }
 
-/* Card focus states during horizontal scroll */
 .feature-cards.horizontal-scroll-mode .card:focus {
   outline: 3px solid var(--color-accent-purple);
   outline-offset: 2px;
   box-shadow: 0 0 0 6px rgba(138, 43, 226, 0.2);
 }
 
-/* Smooth transitions for horizontal scroll mode */
 .feature-cards {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -418,7 +396,7 @@ body.horizontal-scroll-active:active {
   right: 0;
   width: 100%;
   height: 180px;
-  /* Simulating the purple flower and coin */
+  
   background: url('flower.png') no-repeat top right;
   background-size: contain;
   opacity: 0.8;
@@ -426,7 +404,6 @@ body.horizontal-scroll-active:active {
   animation: floatImage 4s ease-in-out infinite;
 }
 
-/* Enhanced card animations */
 .card {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -441,7 +418,6 @@ body.horizontal-scroll-active:active {
   box-shadow: 0 25px 50px rgba(138, 43, 226, 0.2);
 }
 
-/* Navigation animations */
 .nav a {
   position: relative;
   transition: all 0.3s ease;
@@ -462,12 +438,10 @@ body.horizontal-scroll-active:active {
   width: 100%;
 }
 
-/* Logo hover animation */
 .logo-icon {
   transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
-/* Keyframe animations */
 @keyframes floatImage {
 
   0%,
@@ -563,7 +537,6 @@ body.horizontal-scroll-active:active {
   }
 }
 
-/* Animation classes for JavaScript */
 .fade-in-up {
   animation: fadeInUp 0.6s ease-out forwards;
 }
@@ -584,7 +557,6 @@ body.horizontal-scroll-active:active {
   animation: bounceIn 0.8s ease-out forwards;
 }
 
-/* Hero section specific animations */
 .hero-icon {
   display: inline-block;
   animation: float 3s ease-in-out infinite;
@@ -614,7 +586,6 @@ body.horizontal-scroll-active:active {
   animation: fadeInUp 1s ease-out 0.9s both;
 }
 
-/* Feature cards staggered animation */
 .feature-cards .card:nth-child(1) {
   animation: slideInLeft 0.6s ease-out 0.1s both;
 }
@@ -627,7 +598,6 @@ body.horizontal-scroll-active:active {
   animation: slideInRight 0.6s ease-out 0.3s both;
 }
 
-/* Backers section animation */
 .backers-label {
   animation: slideInLeft 0.6s ease-out both;
 }
@@ -636,7 +606,6 @@ body.horizontal-scroll-active:active {
   animation: scaleIn 0.4s ease-out both;
 }
 
-/* Use cases animation */
 .use-cases-header {
   animation: fadeInUp 0.8s ease-out both;
 }
@@ -649,7 +618,6 @@ body.horizontal-scroll-active:active {
   animation: slideInRight 0.6s ease-out 0.2s both;
 }
 
-/* Enhanced scroll animations */
 .animate-on-scroll {
   opacity: 0;
   transform: translateY(30px);
@@ -661,7 +629,6 @@ body.horizontal-scroll-active:active {
   transform: translateY(0);
 }
 
-/* Additional scroll animation types */
 .slide-in-left {
   animation: slideInLeft 0.8s ease-out forwards;
 }
@@ -682,7 +649,6 @@ body.horizontal-scroll-active:active {
   animation: fadeInUp 0.6s ease-out forwards;
 }
 
-/* Staggered animations for different elements */
 h1 {
   animation-delay: 0.1s;
 }
@@ -731,14 +697,12 @@ p {
   animation-delay: 0.7s;
 }
 
-/* Parallax elements */
 .hero-visual,
 .card-image-placeholder,
 .business-visual {
   will-change: transform;
 }
 
-/* Scroll progress indicator */
 .scroll-progress {
   position: fixed;
   top: 0;
