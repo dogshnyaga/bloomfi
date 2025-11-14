@@ -1,11 +1,64 @@
-// Animation system for BloomFi website
+document.addEventListener("DOMContentLoaded", () => {
+  function setupScrollAnimations() {
+    const elementsToAnimate = document.querySelectorAll(".animate-on-scroll");
+
+    const animationObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add("animated");
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      {
+        threshold: 0.15,
+      }
+    );
+
+    elementsToAnimate.forEach((el) => {
+      animationObserver.observe(el);
+    });
+  }
+
+  function setupHorizontalScroll() {
+    const pinSection = document.querySelector(".what-is-bloom");
+    const horizontalScrollEl = document.querySelector(".feature-cards");
+
+    if (!pinSection || !horizontalScrollEl) {
+      console.warn("Не найдены элементы для горизонтальной прокрутки.");
+      return;
+    }
+    const scrollableWidth =
+      horizontalScrollEl.scrollWidth - window.innerWidth + 1200;
+
+    if (scrollableWidth <= 0) return;
+
+    pinSection.style.height = `calc(100vh + ${scrollableWidth}px)`;
+
+    window.addEventListener("scroll", () => {
+      const rect = pinSection.getBoundingClientRect();
+
+      if (rect.top <= 0) {
+        const translateX = Math.max(0, Math.min(scrollableWidth, -rect.top));
+
+        horizontalScrollEl.style.transform = `translateX(-${translateX}px)`;
+      } else {
+        horizontalScrollEl.style.transform = "translateX(0px)";
+      }
+    });
+  }
+
+  setupScrollAnimations();
+  setupHorizontalScroll();
+});
+
 class BloomFiAnimations {
   constructor() {
     this.init();
   }
 
   init() {
-    // Wait for DOM to be fully loaded
     if (document.readyState === "loading") {
       document.addEventListener("DOMContentLoaded", () => {
         this.setupAnimations();
@@ -15,7 +68,6 @@ class BloomFiAnimations {
     }
   }
 
-  // Call all specific setup methods
   setupAnimations() {
     this.setupButtonAnimations();
     this.setupScrollAnimations();
@@ -27,17 +79,14 @@ class BloomFiAnimations {
     this.setupBusinessCardAnimations();
   }
 
-  // Button animations with fill effects
   setupButtonAnimations() {
     const buttons = document.querySelectorAll(".btn");
 
     buttons.forEach((button) => {
-      // Add ripple effect
       button.addEventListener("click", (e) => {
         this.createRipple(e, button);
       });
 
-      // Add magnetic effect for main buttons
       if (
         button.classList.contains("btn-primary") ||
         button.classList.contains("btn-secondary")
@@ -45,7 +94,6 @@ class BloomFiAnimations {
         this.addMagneticEffect(button);
       }
 
-      // Add shine effect
       this.addShineEffect(button);
     });
   }
@@ -115,7 +163,6 @@ class BloomFiAnimations {
     return shine;
   }
 
-  // Enhanced scroll-based animations
   setupScrollAnimations() {
     const observerOptions = {
       threshold: 0.1,
@@ -130,7 +177,6 @@ class BloomFiAnimations {
       });
     }, observerOptions);
 
-    // Observe all major sections and cards
     const elementsToAnimate = document.querySelectorAll(`
             .hero,
             .what-is-bloom,
@@ -148,7 +194,7 @@ class BloomFiAnimations {
 
     elementsToAnimate.forEach((el) => {
       el.classList.add("animate-on-scroll");
-      // Add different animation types based on element type
+
       if (el.tagName === "H1") el.classList.add("slide-in-left");
       else if (el.tagName === "H2") el.classList.add("slide-in-right");
       else if (el.tagName === "H3") el.classList.add("scale-in");
@@ -162,13 +208,10 @@ class BloomFiAnimations {
       observer.observe(el);
     });
 
-    // Add parallax scrolling for background elements
     this.setupParallaxScrolling();
 
-    // Add scroll-triggered counter animations
     this.setupCounterAnimations();
 
-    // Add scroll-based text reveals
     this.setupTextRevealAnimations();
   }
 
@@ -186,19 +229,16 @@ class BloomFiAnimations {
     }, delay);
   }
 
-  // Enhanced parallax scrolling
   setupParallaxScrolling() {
     window.addEventListener("scroll", () => {
       const scrolled = window.pageYOffset;
       const rate = scrolled * -0.3;
 
-      // Hero visual parallax
       const heroVisual = document.querySelector(".hero-visual");
       if (heroVisual) {
         heroVisual.style.transform = `translateY(${rate}px)`;
       }
 
-      // Card image placeholders parallax
       const imagePlaceholders = document.querySelectorAll(
         ".card-image-placeholder"
       );
@@ -207,14 +247,6 @@ class BloomFiAnimations {
         placeholder.style.transform = `translateY(${rate}px)`;
       });
 
-      // Business visual parallax
-      const businessVisual = document.querySelector(".business-visual");
-      if (businessVisual) {
-        const rate = scrolled * -0.15;
-        businessVisual.style.transform = `translateY(${rate}px) scale(1.1)`;
-      }
-
-      // Logo links floating effect on scroll
       const logoLinks = document.querySelectorAll(".logo-link");
       logoLinks.forEach((link, index) => {
         const rate = scrolled * (0.05 + index * 0.02);
@@ -225,7 +257,6 @@ class BloomFiAnimations {
     });
   }
 
-  // Counter animations triggered by scroll
   setupCounterAnimations() {
     const counters = document.querySelectorAll("[data-count]");
 
@@ -262,38 +293,51 @@ class BloomFiAnimations {
     }, 20);
   }
 
-  // Text reveal animations
   setupTextRevealAnimations() {
     const textElements = document.querySelectorAll("h1, h2, h3, p, .subtitle");
-    
-    textElements.forEach((element, index) => {
-      const text = element.textContent;
-      const textLength = text.length;
-      
-      // Apply different animations based on text length
-      if (textLength <= 30) {
-        // Short texts (headings) - use typewriter effect
+
+    const textObserver = new IntersectionObserver(
+      (entries, observer) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const element = entry.target;
+            const originalText = element.dataset.typewriterText;
+
+            if (originalText) {
+              this.typewriterEffect(element, originalText);
+            } else {
+              element.style.opacity = "1";
+              element.style.transform = "translateY(0)";
+            }
+
+            observer.unobserve(element);
+          }
+        });
+      },
+      {
+        threshold: 0.5,
+        rootMargin: "0px 0px -50px 0px",
+      }
+    );
+
+    textElements.forEach((element) => {
+      const text = element.textContent.trim();
+      if (text.length === 0) return;
+
+      if (text.length <= 30) {
+        element.dataset.typewriterText = text;
         element.textContent = "";
-        element.setAttribute("data-text", text);
-        
-        setTimeout(() => {
-          this.typewriterEffect(element, text, index * 100);
-        }, 10);
       } else {
-        // Long texts (paragraphs) - use quick fade-in
         element.style.opacity = "0";
         element.style.transform = "translateY(20px)";
-        element.style.transition = "all 0.4s ease-out";
-        
-        setTimeout(() => {
-          element.style.opacity = "1";
-          element.style.transform = "translateY(0)";
-        }, 200 + index * 50);
+        element.style.transition = "all 0.6s ease-out";
       }
+
+      textObserver.observe(element);
     });
   }
 
-  typewriterEffect(element, text, delay) {
+  typewriterEffect(element, text) {
     element.style.opacity = "1";
     let i = 0;
     const timer = setInterval(() => {
@@ -303,12 +347,10 @@ class BloomFiAnimations {
       } else {
         clearInterval(timer);
       }
-    }, 20 + delay * 0.1); // Faster typing speed with minimal delay impact
+    }, 50);
   }
 
-  // Page entry animations
   setupEntryAnimations() {
-    // Animate header first
     const header = document.querySelector(".header");
     header.style.transform = "translateY(-100%)";
     header.style.transition = "transform 0.8s ease-out";
@@ -317,7 +359,6 @@ class BloomFiAnimations {
       header.style.transform = "translateY(0)";
     }, 100);
 
-    // Animate hero section
     const hero = document.querySelector(".hero");
     hero.style.opacity = "0";
     hero.style.transform = "translateY(50px)";
@@ -328,7 +369,6 @@ class BloomFiAnimations {
       hero.style.transform = "translateY(0)";
     }, 300);
 
-    // Animate logo with bounce effect
     const logo = document.querySelector(".logo");
     logo.style.transform = "scale(0)";
     logo.style.transition = "transform 0.5s ease-out";
@@ -338,9 +378,7 @@ class BloomFiAnimations {
     }, 500);
   }
 
-  // Enhanced hover effects
   setupHoverEffects() {
-    // Logo hover effect
     const logo = document.querySelector(".logo");
     if (logo) {
       logo.addEventListener("mouseenter", () => {
@@ -355,7 +393,6 @@ class BloomFiAnimations {
       });
     }
 
-    // Card hover effects
     const cards = document.querySelectorAll(".card");
     cards.forEach((card) => {
       card.addEventListener("mouseenter", () => {
@@ -370,7 +407,6 @@ class BloomFiAnimations {
       });
     });
 
-    // Logo links animation
     const logoLinks = document.querySelectorAll(".logo-link");
     logoLinks.forEach((link, index) => {
       link.style.opacity = "0";
@@ -384,15 +420,12 @@ class BloomFiAnimations {
     });
   }
 
-  // Parallax and floating effects
   setupParallaxEffects() {
-    // Floating animation for hero icon
     const heroIcon = document.querySelector(".hero-icon");
     if (heroIcon) {
       heroIcon.style.animation = "float 3s ease-in-out infinite";
     }
 
-    // Parallax scrolling for background elements
     window.addEventListener("scroll", () => {
       const scrolled = window.pageYOffset;
       const parallax = scrolled * 0.5;
@@ -403,17 +436,14 @@ class BloomFiAnimations {
       }
     });
 
-    // Animated gradient background
     this.createAnimatedGradient();
   }
 
-  // Specific animations for backers section
   setupBackersAnimations() {
     const backersSection = document.querySelector(".backers");
     const logoLinks = document.querySelectorAll(".logo-link");
 
     if (backersSection) {
-      // Staggered animation for logo links
       logoLinks.forEach((link, index) => {
         link.style.opacity = "0";
         link.style.transform = "translateY(20px) scale(0.8)";
@@ -425,7 +455,6 @@ class BloomFiAnimations {
         }, 800 + index * 150);
       });
 
-      // Hover effects for logo links
       logoLinks.forEach((link) => {
         link.addEventListener("mouseenter", () => {
           link.style.opacity = "1";
@@ -442,17 +471,14 @@ class BloomFiAnimations {
     }
   }
 
-  // Specific animations for feature cards
   setupFeatureCardsAnimations() {
     const featureCards = document.querySelectorAll(".feature-cards .card");
 
     featureCards.forEach((card, index) => {
-      // Enhanced card animations
       card.addEventListener("mouseenter", () => {
         card.style.transform = "translateY(-12px) scale(1.03) rotateX(5deg)";
         card.style.boxShadow = "0 25px 50px rgba(0,0,0,0.2)";
 
-        // Special effect for visual card
         if (card.classList.contains("card-visual")) {
           card.style.background =
             "radial-gradient(circle at 90% 50%, #e8eaf6 30%, #d1c4e9 100%)";
@@ -481,7 +507,6 @@ class BloomFiAnimations {
         }
       });
 
-      // Click animation
       card.addEventListener("click", () => {
         card.style.animation = "cardClick 0.3s ease-out";
         setTimeout(() => {
@@ -491,13 +516,11 @@ class BloomFiAnimations {
     });
   }
 
-  // Specific animations for business card
   setupBusinessCardAnimations() {
     const businessCard = document.querySelector(".card-business");
     const businessVisual = document.querySelector(".business-visual");
 
     if (businessCard) {
-      // Enhanced business card interactions
       businessCard.addEventListener("mouseenter", () => {
         businessCard.style.transform = "translateY(-8px) scale(1.02)";
         businessCard.style.boxShadow = "0 20px 40px rgba(0,0,0,0.15)";
@@ -520,7 +543,6 @@ class BloomFiAnimations {
         }
       });
 
-      // Learn more link animation
       const learnMore = businessCard.querySelector(".learn-more");
       if (learnMore) {
         learnMore.addEventListener("mouseenter", () => {
@@ -536,7 +558,6 @@ class BloomFiAnimations {
     }
   }
 
-  // Call all specific setup methods
   setupAnimations() {
     this.setupButtonAnimations();
     this.setupScrollAnimations();
@@ -554,10 +575,9 @@ class BloomFiAnimations {
 
     let hue = 200;
     let direction = 1;
-    const speed = 0.2; // <-- Чем меньше это число, тем медленнее анимация
+    const speed = 0.2;
 
     function animate() {
-      // Умножаем направление на скорость
       hue += direction * speed;
 
       if (hue >= 320) direction = -1;
@@ -574,10 +594,8 @@ class BloomFiAnimations {
   }
 }
 
-// Initialize animations
 new BloomFiAnimations();
 
-// Add CSS for animations
 const animationStyles = document.createElement("style");
 animationStyles.textContent = `
     @keyframes ripple {
@@ -663,18 +681,18 @@ animationStyles.textContent = `
         transition: all 0.3s ease;
     }
 
-    /* Stagger animations for feature cards */
+   
     .feature-cards .card:nth-child(1) { animation-delay: 0.1s; }
     .feature-cards .card:nth-child(2) { animation-delay: 0.2s; }
     .feature-cards .card:nth-child(3) { animation-delay: 0.3s; }
 
-    /* Logo links hover effect */
+   
     .logo-link:hover {
         transform: translateY(-2px);
         transition: all 0.3s ease;
     }
 
-    /* Pulse effect for primary buttons */
+   
     .btn-primary::after {
         content: '';
         position: absolute;

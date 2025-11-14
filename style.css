@@ -31,7 +31,7 @@ body {
   margin: 0 auto;
 }
 
-/* --- 1. Header/Navigation --- */
+
 .header {
   background-color: var(--color-white);
   padding: 15px 0;
@@ -76,7 +76,7 @@ body {
   color: var(--color-dark-text);
 }
 
-/* Buttons */
+
 .btn {
   padding: 12px 25px;
   border: none;
@@ -145,7 +145,6 @@ body {
   transform: translateY(-1px);
 }
 
-/* --- 2. Hero Section --- */
 .hero {
   background: radial-gradient(circle at 50% 0,
       #ffffff,
@@ -207,9 +206,17 @@ body {
   z-index: 2;
 }
 
-
 .what-is-bloom {
+  position: relative;
   padding: 100px 0;
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 30vh;
+  height: 60vh;
+  width: 100%;
+  overflow: hidden;
 }
 
 .what-is-bloom-grid {
@@ -245,16 +252,22 @@ body {
 .feature-cards {
   display: flex;
   gap: 30px;
-  overflow-x: auto;
-  overflow-y: hidden;
-  scroll-behavior: smooth;
-  white-space: nowrap;
+
+  overflow: visible;
   padding: 20px 0;
   margin: 0 -30px;
   padding-left: 30px;
   padding-right: 30px;
-  scroll-snap-type: x mandatory;
+
+  scrollbar-width: none;
+
 }
+
+.feature-cards::-webkit-scrollbar {
+  display: none;
+
+}
+
 
 .feature-cards .card {
   background-color: #2b2742;
@@ -295,98 +308,6 @@ body {
 .feature-cards .card-visual p {
   color: var(--color-dark-text);
   width: 50%;
-}
-
-.feature-cards::-webkit-scrollbar {
-  height: 8px;
-}
-
-.feature-cards::-webkit-scrollbar-track {
-  background: rgba(0, 0, 0, 0.1);
-  border-radius: 4px;
-}
-
-.feature-cards::-webkit-scrollbar-thumb {
-  background: var(--color-accent-purple);
-  border-radius: 4px;
-}
-
-.feature-cards::-webkit-scrollbar-thumb:hover {
-  background: #6b21a8;
-}
-
-.feature-cards.horizontal-scroll-mode {
-  border: 2px solid var(--color-accent-purple);
-  border-radius: 20px;
-  background: rgba(138, 43, 226, 0.05);
-}
-
-.feature-cards.horizontal-scroll-mode::before {
-  content: '← Scroll to explore →';
-  position: absolute;
-  top: -30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--color-accent-purple);
-  color: white;
-  padding: 5px 15px;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 500;
-  z-index: 10;
-  animation: pulse 2s infinite;
-}
-
-#scroll-hint {
-  position: fixed;
-  top: 20px;
-  left: 50%;
-  transform: translateX(-50%) translateY(-20px);
-  background: rgba(0, 0, 0, 0.8);
-  color: white;
-  padding: 15px 25px;
-  border-radius: 25px;
-  z-index: 10000;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-}
-
-.scroll-hint-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 5px;
-  font-size: 0.9rem;
-  font-weight: 500;
-}
-
-.scroll-hint-content span {
-  opacity: 0.9;
-}
-
-body.horizontal-scroll-active {
-  cursor: grab;
-}
-
-body.horizontal-scroll-active:active {
-  cursor: grabbing;
-}
-
-.feature-cards.horizontal-scroll-mode .card:focus {
-  outline: 3px solid var(--color-accent-purple);
-  outline-offset: 2px;
-  box-shadow: 0 0 0 6px rgba(138, 43, 226, 0.2);
-}
-
-.feature-cards {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.feature-cards.horizontal-scroll-mode {
-  position: relative;
-  z-index: 100;
-  box-shadow: 0 20px 60px rgba(138, 43, 226, 0.3);
 }
 
 .card-image-placeholder {
@@ -575,26 +496,6 @@ body.horizontal-scroll-active:active {
   }
 }
 
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-.slide-in-left {
-  animation: slideInLeft 0.6s ease-out forwards;
-}
-
-.slide-in-right {
-  animation: slideInRight 0.6s ease-out forwards;
-}
-
-.scale-in {
-  animation: scaleIn 0.5s ease-out forwards;
-}
-
-.bounce-in {
-  animation: bounceIn 0.8s ease-out forwards;
-}
-
 .hero-icon {
   display: inline-block;
   animation: float 3s ease-in-out infinite;
@@ -624,16 +525,30 @@ body.horizontal-scroll-active:active {
   animation: fadeInUp 1s ease-out 0.9s both;
 }
 
-.feature-cards .card:nth-child(1) {
-  animation: slideInLeft 0.6s ease-out 0.1s both;
+.animate-on-scroll {
+  opacity: 0;
+  transition: opacity 0.6s ease-out, transform 0.6s ease-out;
 }
 
-.feature-cards .card:nth-child(2) {
-  animation: fadeInUp 0.6s ease-out 0.2s both;
+.animate-on-scroll.fade-in-up {
+  transform: translateY(30px);
 }
 
-.feature-cards .card:nth-child(3) {
-  animation: slideInRight 0.6s ease-out 0.3s both;
+.animate-on-scroll.slide-in-left {
+  transform: translateX(-50px);
+}
+
+.animate-on-scroll.slide-in-right {
+  transform: translateX(50px);
+}
+
+.animate-on-scroll.scale-in {
+  transform: scale(0.8);
+}
+
+.animate-on-scroll.animated {
+  opacity: 1;
+  transform: translateY(0) translateX(0) scale(1);
 }
 
 .backers-label {
@@ -656,55 +571,13 @@ body.horizontal-scroll-active:active {
   animation: slideInRight 0.6s ease-out 0.2s both;
 }
 
-.animate-on-scroll {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.animate-on-scroll.animated {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.slide-in-left {
-  animation: slideInLeft 0.8s ease-out forwards;
-}
-
-.slide-in-right {
-  animation: slideInRight 0.8s ease-out forwards;
-}
-
-.scale-in {
-  animation: scaleIn 0.6s ease-out forwards;
-}
-
-.bounce-in {
-  animation: bounceIn 0.8s ease-out forwards;
-}
-
-.fade-in-up {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-h1 {
-  animation-delay: 0.1s;
-}
-
-h2 {
-  animation-delay: 0.2s;
-}
-
-h3 {
-  animation-delay: 0.3s;
-}
-
-p {
-  animation-delay: 0.4s;
-}
-
+h1,
+h2,
+h3,
+p,
 .btn {
-  animation-delay: 0.5s;
+  animation-delay: 0.1s;
+
 }
 
 .logo-link:nth-child(1) {
@@ -741,470 +614,8 @@ p {
   will-change: transform;
 }
 
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 0%;
-  height: 3px;
-  background: linear-gradient(90deg, #8a2be2, #a855f7, #8a2be2);
-  z-index: 9999;
-  transition: width 0.3s ease;
-}
 
-/* Text reveal effects */
-.text-reveal {
-  overflow: hidden;
-  position: relative;
-}
 
-.text-reveal::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, var(--color-accent-purple), transparent);
-  transform: translateX(-100%);
-  transition: transform 0.6s ease;
-}
-
-.text-reveal.revealed::before {
-  transform: translateX(100%);
-}
-
-/* Enhanced counter animation */
-.counter {
-  font-size: 2rem;
-  font-weight: bold;
-  color: var(--color-accent-purple);
-}
-
-/* Floating elements on scroll */
-.floating-on-scroll {
-  animation: floatOnScroll 4s ease-in-out infinite;
-}
-
-@keyframes floatOnScroll {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  25% {
-    transform: translateY(-10px) rotate(1deg);
-  }
-
-  50% {
-    transform: translateY(-5px) rotate(0deg);
-  }
-
-  75% {
-    transform: translateY(10px) rotate(-1deg);
-  }
-}
-
-/* Morphing shapes animation */
-.morphing-shape {
-  border-radius: 50%;
-  animation: morphing 8s ease-in-out infinite;
-}
-
-@keyframes morphing {
-
-  0%,
-  100% {
-    border-radius: 50%;
-    transform: scale(1) rotate(0deg);
-  }
-
-  25% {
-    border-radius: 20%;
-    transform: scale(1.1) rotate(90deg);
-  }
-
-  50% {
-    border-radius: 0%;
-    transform: scale(0.9) rotate(180deg);
-  }
-
-  75% {
-    border-radius: 20%;
-    transform: scale(1.05) rotate(270deg);
-  }
-}
-
-/* Enhanced card hover with scroll interaction */
-.card-interactive {
-  transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-  transform-style: preserve-3d;
-}
-
-.card-interactive:hover {
-  transform: translateY(-15px) rotateX(10deg) scale(1.05);
-  box-shadow: 0 30px 60px rgba(138, 43, 226, 0.3);
-}
-
-/* Scroll-triggered glow effects */
-.glow-on-scroll {
-  position: relative;
-  overflow: hidden;
-}
-
-.glow-on-scroll::before {
-  content: '';
-  position: absolute;
-  top: -2px;
-  left: -2px;
-  right: -2px;
-  bottom: -2px;
-  background: linear-gradient(45deg, #8a2be2, #a855f7, #8a2be2);
-  background-size: 400% 400%;
-  border-radius: inherit;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  animation: gradientShift 3s ease infinite;
-}
-
-.glow-on-scroll:hover::before {
-  opacity: 1;
-}
-
-@keyframes gradientShift {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Smooth scroll behavior */
-html {
-  scroll-behavior: smooth;
-}
-
-/* Scroll snap for sections */
-section {
-  scroll-snap-align: start;
-}
-
-.container {
-  scroll-snap-type: y mandatory;
-}
-
-/* Loading skeleton animation */
-.skeleton {
-  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
-  background-size: 200% 100%;
-  animation: loading 1.5s infinite;
-}
-
-@keyframes loading {
-  0% {
-    background-position: 200% 0;
-  }
-
-  100% {
-    background-position: -200% 0;
-  }
-}
-
-/* Loading animation for the page */
-body {
-  animation: pageLoad 0.8s ease-out;
-}
-
-@keyframes pageLoad {
-  from {
-    opacity: 0;
-  }
-
-  to {
-    opacity: 1;
-  }
-}
-
-/* Card click animation */
-@keyframes cardClick {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(0.95);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Enhanced business visual animations */
-.business-visual {
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Backers section specific animations */
-.backers {
-  position: relative;
-  overflow: hidden;
-}
-
-.backers::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  animation: backersShine 3s infinite;
-  z-index: 1;
-}
-
-@keyframes backersShine {
-  0% {
-    left: -100%;
-  }
-
-  100% {
-    left: 100%;
-  }
-}
-
-/* Feature cards enhanced animations */
-.feature-cards {
-  position: relative;
-}
-
-.card-visual {
-  position: relative;
-  overflow: hidden;
-}
-
-.card-visual::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  left: -50%;
-  width: 200%;
-  height: 200%;
-  background: conic-gradient(from 0deg, transparent, rgba(138, 43, 226, 0.1), transparent);
-  animation: rotateGradient 4s linear infinite;
-  z-index: 1;
-}
-
-.card-visual::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: inherit;
-  z-index: 2;
-}
-
-.card-visual>* {
-  position: relative;
-  z-index: 3;
-}
-
-@keyframes rotateGradient {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-/* Business card specific enhancements */
-.card-business {
-  position: relative;
-  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.card-business::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 4px;
-  background: linear-gradient(90deg, var(--color-accent-purple), #a855f7, var(--color-accent-purple));
-  background-size: 200% 100%;
-  animation: gradientMove 3s ease-in-out infinite;
-}
-
-@keyframes gradientMove {
-
-  0%,
-  100% {
-    background-position: 0% 50%;
-  }
-
-  50% {
-    background-position: 100% 50%;
-  }
-}
-
-/* Enhanced logo link animations */
-.logo-link {
-  position: relative;
-  overflow: hidden;
-}
-
-.logo-link::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 0;
-  height: 0;
-  background: rgba(138, 43, 226, 0.1);
-  border-radius: 50%;
-  transform: translate(-50%, -50%);
-  transition: all 0.3s ease;
-  z-index: -1;
-}
-
-.logo-link:hover::before {
-  width: 100%;
-  height: 100%;
-}
-
-/* Floating elements for visual enhancement */
-.floating {
-  animation: floating 6s ease-in-out infinite;
-}
-
-@keyframes floating {
-
-  0%,
-  100% {
-    transform: translateY(0px) rotate(0deg);
-  }
-
-  33% {
-    transform: translateY(-10px) rotate(1deg);
-  }
-
-  66% {
-    transform: translateY(5px) rotate(-1deg);
-  }
-}
-
-/* Pulse animation for important elements */
-.pulse {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    transform: scale(1);
-  }
-
-  50% {
-    transform: scale(1.05);
-  }
-
-  100% {
-    transform: scale(1);
-  }
-}
-
-/* Stagger animation delays for better visual flow */
-.feature-cards .card:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.feature-cards .card:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.feature-cards .card:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.logos .logo-link:nth-child(1) {
-  animation-delay: 0.1s;
-}
-
-.logos .logo-link:nth-child(2) {
-  animation-delay: 0.2s;
-}
-
-.logos .logo-link:nth-child(3) {
-  animation-delay: 0.3s;
-}
-
-.logos .logo-link:nth-child(4) {
-  animation-delay: 0.4s;
-}
-
-.logos .logo-link:nth-child(5) {
-  animation-delay: 0.5s;
-}
-
-.logos .logo-link:nth-child(6) {
-  animation-delay: 0.6s;
-}
-
-.logos .logo-link:nth-child(7) {
-  animation-delay: 0.7s;
-}
-
-/* Special glow effects */
-.glow-on-hover {
-  transition: all 0.3s ease;
-}
-
-.glow-on-hover:hover {
-  box-shadow: 0 0 20px rgba(138, 43, 226, 0.3);
-}
-
-/* Typing effect for text */
-.typing-effect {
-  overflow: hidden;
-  border-right: 2px solid var(--color-accent-purple);
-  white-space: nowrap;
-  animation: typing 3s steps(30, end), blink 0.5s step-end infinite;
-}
-
-@keyframes typing {
-  from {
-    width: 0;
-  }
-
-  to {
-    width: 100%;
-  }
-}
-
-@keyframes blink {
-
-  from,
-  to {
-    border-color: transparent;
-  }
-
-  50% {
-    border-color: var(--color-accent-purple);
-  }
-}
-
-
-/* --- 4. Backers/Logos Section --- */
 .backers {
   padding: 60px 0 100px;
   display: flex;
@@ -1247,7 +658,7 @@ body {
 }
 
 
-/* --- 5. Use Cases Section --- */
+
 .use-cases {
   padding-bottom: 100px;
 }
@@ -1291,7 +702,6 @@ body {
   overflow: hidden;
 }
 
-/* Placeholder for the first card (not visible in image) */
 .use-case-placeholder {
   background-color: var(--color-light-gray);
   padding: 0;
@@ -1323,20 +733,17 @@ body {
   color: var(--color-accent-purple);
 }
 
-/* Placeholder for the 3D Treasury/Bank building image */
 .business-visual {
   position: absolute;
   bottom: 0;
   right: -50px;
   width: 120%;
   height: 600px;
-  /* Simulating the purple building */
   background: url('building.png') no-repeat bottom center;
   background-size: contain;
   z-index: 1;
 }
 
-/* Ensure text is above the visual */
 .card-business h3,
 .card-business p,
 .learn-more {
@@ -1344,7 +751,7 @@ body {
   z-index: 2;
 }
 
-/* Media Query for basic responsiveness (mobile/tablet) */
+
 @media (max-width: 1000px) {
   .header-content {
     flex-wrap: wrap;
@@ -1387,7 +794,6 @@ body {
 
   .card-image-placeholder {
     display: none;
-    /* Hide complex visual on small screens */
   }
 
   .business-visual {
@@ -1398,5 +804,19 @@ body {
     flex-wrap: wrap;
     justify-content: center;
     gap: 15px 30px;
+  }
+}
+
+@media (orientation: landscape) {
+  .what-is-bloom-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+
+  .left-content,
+  .right-content {
+    max-width: 100%;
   }
 }
